@@ -13,3 +13,8 @@ data "http" "argocd_manifest" {
 resource "kubernetes_manifest" "argocd_install" {
   manifest = yamldecode(data.http.argocd_manifest.body) # Decodifica o YAML remoto
 }
+
+# kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+# argocd login <argocd-server-address> --insecure
+# argocd repo add git@github.com:cleversonbrsp/dev-ops.git --ssh-private-key-path ~/.ssh/argocd_github_key
+# argocd repo list

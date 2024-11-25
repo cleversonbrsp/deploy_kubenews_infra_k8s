@@ -18,3 +18,4 @@ output "cluster_ocid" {
   value       = oci_containerengine_cluster.generated_oci_containerengine_cluster.id
   description = "The OCID of the Kubernetes cluster."
 }
+
