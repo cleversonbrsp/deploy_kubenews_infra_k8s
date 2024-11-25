@@ -1,0 +1,16 @@
+keys
+k8s_cluster/.terraform
+k8s_cluster/.terraform.lock.hcl
+k8s_cluster/.terraform.tfstate.lock.info
+k8s_cluster/terraform.tfstate
+k8s_cluster/terraform.tfstate.backup
+k8s_cluster/terraform.tfvars
+k8s_cluster/*.tf.bkp
+
+argocd/.terraform
+argocd/.terraform.lock.hcl
+argocd/.terraform.tfstate.lock.info
+argocd/terraform.tfstate
+argocd/terraform.tfstate.backup
+argocd/terraform.tfvars
+argocd/*.tf.bkp
