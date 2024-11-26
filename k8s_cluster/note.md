@@ -1,6 +1,10 @@
 *node image*
 https://docs.oracle.com/en-us/iaas/images/image/9e988ba5-267c-44fc-bbe7-68936d6b344c/
 
+*Local Access*
+oci ce cluster create-kubeconfig --cluster-id [clusterID] --file $HOME/.kube/config --region sa-saopaulo-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
+
+
 
 terraform.tfvars:
 ---

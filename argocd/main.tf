@@ -1,20 +1,25 @@
 # Configuração do provider Kubernetes para conectar ao cluster
 provider "kubernetes" {
   config_path    = var.kubeconfig_path # Caminho para o arquivo kubeconfig
-  config_context = var.kube_context # Nome do contexto do cluster Kubernetes
+  config_context = var.kube_context   # Nome do contexto do cluster Kubernetes
 }
 
-# Recurso para buscar o YAML remoto do ArgoCD
-data "http" "argocd_manifest" {
-  url = "https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    name = "argocd"
+  }
+}
+
+# Recurso para carregar o manifesto do ArgoCD a partir de um arquivo local
+data "local_file" "argocd_manifest" {
+  filename = "${path.module}/install.yaml" # Caminho para o arquivo local
 }
 
 # Recurso para aplicar o manifesto do ArgoCD
 resource "kubernetes_manifest" "argocd_install" {
-  manifest = yamldecode(data.http.argocd_manifest.body) # Decodifica o YAML remoto
-}
+  depends_on = [kubernetes_namespace.argocd]
+  # Divide múltiplos documentos YAML em partes
+  for_each = toset(split("---", data.local_file.argocd_manifest.content))
 
-# kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-# argocd login <argocd-server-address> --insecure
-# argocd repo add git@github.com:cleversonbrsp/dev-ops.git --ssh-private-key-path ~/.ssh/argocd_github_key
-# argocd repo list
+  manifest = yamldecode(each.value) # Decodifica cada documento YAML separadamente
+}
